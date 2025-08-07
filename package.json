@@ -1,0 +1,175 @@
+{
+  "name": "fortify-plugin-deneme1",
+  "displayName": "Fortify AI Fixer",
+  "description": "Scans Fortify .fpr reports, displays vulnerabilities, and provides AI-powered fixes directly within VS Code.",
+  "version": "0.1.0",
+  "publisher": "TurkcellMuhammedBerkayErolVeSumeyyeBerfinKorkmaz",
+  "engines": {
+    "vscode": "^1.89.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onView:fortifyVulnerabilityExplorer"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "fortify-plugin-deneme1.loadReport",
+        "title": "Fortify: Load .fpr Report",
+        "icon": "$(folder-opened)"
+      },
+      {
+        "command": "fortify-plugin-deneme1.refreshIssues",
+        "title": "Refresh/Reload Report",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "fortify-plugin-deneme1.solveAllIssues",
+        "title": "Fix All Issues (AI)",
+        "icon": "$(zap)"
+      },
+      {
+        "command": "fortify-plugin-deneme1.commitChanges",
+        "title": "Commit All Applied Fixes",
+        "icon": "$(git-commit)"
+      },
+      {
+        "command": "fortify-plugin-deneme1.fixWithAI",
+        "title": "Fix with AI",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "fortify-plugin-deneme1.solveSeverityGroup",
+        "title": "Fix All In This Group",
+        "icon": "$(wrench-subaction)"
+      },
+      {
+        "command": "fortify-plugin-deneme1.markAsFalsePositive",
+        "title": "Mark as False Positive",
+        "icon": "$(issue-closed)"
+      },
+      {
+        "command": "fortify-plugin-deneme1.unmarkAsFalsePositive",
+        "title": "Unmark as False Positive",
+        "icon": "$(issue-reopened)"
+      },
+      {
+        "command": "fortify-plugin-deneme1.unfixIssue",
+        "title": "Unmark as Fixed",
+        "icon": "$(debug-step-back)"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "fortifyVulnerabilityExplorer",
+          "name": "Fortify Findings"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "fortify-plugin-deneme1.loadReport",
+          "when": "view == fortifyVulnerabilityExplorer",
+          "group": "navigation@1"
+        },
+        {
+          "command": "fortify-plugin-deneme1.refreshIssues",
+          "when": "view == fortifyVulnerabilityExplorer",
+          "group": "navigation@2"
+        },
+        {
+          "command": "fortify-plugin-deneme1.solveAllIssues",
+          "when": "view == fortifyVulnerabilityExplorer",
+          "group": "navigation@3"
+        },
+        {
+          "command": "fortify-plugin-deneme1.commitChanges",
+          "when": "view == fortifyVulnerabilityExplorer",
+          "group": "navigation@4"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "fortify-plugin-deneme1.fixWithAI",
+          "when": "view == fortifyVulnerabilityExplorer && viewItem == 'vulnerability'",
+          "group": "inline"
+        },
+        {
+          "command": "fortify-plugin-deneme1.solveSeverityGroup",
+          "when": "view == fortifyVulnerabilityExplorer && viewItem == 'severityGroup'",
+          "group": "inline"
+        },
+        {
+          "command": "fortify-plugin-deneme1.markAsFalsePositive",
+          "when": "view == fortifyVulnerabilityExplorer && viewItem == 'vulnerability'",
+          "group": "inline"
+        },
+        {
+          "command": "fortify-plugin-deneme1.unmarkAsFalsePositive",
+          "when": "view == fortifyVulnerabilityExplorer && viewItem == 'vulnerability-ignored'",
+          "group": "inline"
+        },
+        {
+          "command": "fortify-plugin-deneme1.unfixIssue",
+          "when": "view == fortifyVulnerabilityExplorer && viewItem == 'vulnerability-fixed'",
+          "group": "inline"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Fortify AI Fixer",
+      "properties": {
+        "fortify-plugin-deneme1.geminiApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Your Google Gemini API key for generating code fixes."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/adm-zip": "^0.5.7",
+    "@types/jszip": "^3.4.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/node-fetch": "^2.6.12",
+    "@types/vscode": "^1.89.0",
+    "@types/xml2js": "^0.4.14",
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/parser": "^7.1.1",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.5.2",
+    "esbuild": "^0.20.2",
+    "eslint": "^8.57.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.16",
+    "jszip": "^3.10.1",
+    "node-fetch": "^2.7.0",
+    "xml2js": "^0.6.2"
+  },
+  "extensionDependencies": [
+    "vscode.git"
+  ]
+}
